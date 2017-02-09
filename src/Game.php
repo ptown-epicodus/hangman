@@ -6,6 +6,7 @@
         private $incorrect_letters;
         private $guesses;
         private $letter_positions;
+        private $won;
 
         function __construct()
         {
@@ -14,6 +15,7 @@
             $this->incorrect_letters = array();
             $this->guesses = array();
             $this->letter_positions = array_fill(0, count($this->word), '-');
+            $this->won = false;
         }
 
         function getWord()
@@ -103,6 +105,16 @@
             for ($i = 0; $i < count($indices); $i++) {
                 $this->letter_positions[$indices[$i]] = $letter;
             }
+        }
+
+        function getWon()
+        {
+            return $this->won;
+        }
+
+        function win()
+        {
+            $this->won = true;
         }
 
         function save()

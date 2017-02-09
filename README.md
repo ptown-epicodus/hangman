@@ -43,6 +43,7 @@ JSON
 * An incorrect guess displays a component of the 'hangman' and decrements by one the number of guesses the player can make.
 * An incorrect letter guess adds that letter to the display of letters not present in the word.
 * The player wins the game when he guess the word correctly and loses when he has reached the limit of incorrect guesses.
+* The player can start a new game when the previous one concludes.
 
 
 ## Known Bugs

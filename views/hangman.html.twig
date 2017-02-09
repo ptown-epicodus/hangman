@@ -1,19 +1,36 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <link href='css/bootstrap.min.css' rel='stylesheet' type='text/css'>
-        <link href='css/styles.css' rel='stylesheet' type='text/css'>
-        <title>Hangman</title>
-    </head>
-    <body>
-        <div class='container'>
-            {% if game is empty %}
-                <form action='/new_game' method='post'>
-                    <button type='submit'>Start game!</button>
-                </form>
-            {% else %}
-                <p>{{ game.getLetterPositionsString }}</p>
+<head>
+    <link href='css/bootstrap.min.css' rel='stylesheet' type='text/css'>
+    <link href='css/styles.css' rel='stylesheet' type='text/css'>
+    <title>Hangman</title>
+</head>
+<body>
+    <div class='container'>
+        {% if game is empty %}
+            <form action='/new_game' method='post'>
+                <button type='submit'>Start game!</button>
+            </form>
+        {% else %}
+            {% if game.getWon %}
+                <p>You won!</p>
+            {% elseif game.getGuessCount < 6 %}
+                <p>You guessed wrong</p>
             {% endif %}
-        </div>
-    </body>
+            <h1>{{ game.getLetterPositionsString }}</h1>
+            <h2>Remaining mistakes: {{ game.getGuessCount }}</h2>
+            <div class='row'>
+                <div class='col-md-6'>
+                    <form action='/word_guess' method='post'>
+                        <div class='form-group'>
+                            <label for='word-guess'>Word Guess</label>
+                            <input id='word-guess' name='word-guess' type='text'>
+                        </div>
+                        <button type='submit'>Guess Word!</button>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</body>
 </html>

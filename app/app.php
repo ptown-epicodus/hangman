@@ -22,14 +22,29 @@
     });
 
     $app->get('/hangman', function() use ($app) {
+        $game = Game::getGame();
+
         return $app['twig']->render('hangman.html.twig', array(
-            'game' => Game::getGame()
+            'game' => $game
         ));
     });
 
-    $app->post('new_game', function() use ($app) {
+    $app->post('/new_game', function() use ($app) {
         $game = new Game();
         $game->save();
+
+        return $app->redirect('/hangman');
+    });
+
+    $app->post('/word_guess', function() use ($app) {
+        $game = Game::getGame();
+        $word = $_POST['word-guess'];
+
+        if ($game->getWordString() == $word){
+            $game->win();
+        } else {
+            $game->decrementGuessCount();
+        }
 
         return $app->redirect('/hangman');
     });
