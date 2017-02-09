@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href='css/bootstrap.min.css' rel='stylesheet' type='text/css'>
+        <link href='css/styles.css' rel='stylesheet' type='text/css'>
+        <title>Hangman</title>
+    </head>
+    <body>
+        <div class='container'>
+            {% if game is empty %}
+                <form action='/new_game' method='post'>
+                    <button type='submit'>Start game!</button>
+                </form>
+            {% else %}
+                <p>{{ game.getLetterPositionsString }}</p>
+            {% endif %}
+        </div>
+    </body>
+</html>

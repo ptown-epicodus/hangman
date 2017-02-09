@@ -21,6 +21,11 @@
             return $this->word;
         }
 
+        function getWordString()
+        {
+            return implode($this->word);
+        }
+
         function getGuessCount()
         {
             return $this->guess_count;
@@ -88,11 +93,26 @@
             return $this->letter_positions;
         }
 
+        function getLetterPositionsString()
+        {
+            return implode($this->letter_positions);
+        }
+
         function updateLetterPositions($letter, $indices)
         {
             for ($i = 0; $i < count($indices); $i++) {
                 $this->letter_positions[$indices[$i]] = $letter;
             }
+        }
+
+        function save()
+        {
+            $_SESSION['game'] = $this;
+        }
+
+        static function getGame()
+        {
+            return $_SESSION['game'];
         }
     }
 ?>
