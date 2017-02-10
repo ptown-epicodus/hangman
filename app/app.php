@@ -49,7 +49,7 @@
 
     $app->post('/word_guess', function() use ($app) {
         $game = Game::getGame();
-        $word = $_POST['word-guess'];
+        $word = strtolower($_POST['word-guess']);
 
         if ($game->getWordString() == $word){
             $game->win();
@@ -62,7 +62,7 @@
 
     $app->post('/new_guess', function() use ($app) {
         $game = Game::getGame();
-        $guess = new Guess($_POST['letter-guess']);
+        $guess = new Guess(strtolower($_POST['letter-guess']));
         $unique = $game->checkGuesses($guess->getLetter());
         if ($unique) {
             $game->addGuess($guess);
