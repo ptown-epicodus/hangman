@@ -11,7 +11,9 @@
 
         function __construct()
         {
-            $this->word = str_split('hello');
+            $this->word = str_split(
+                Game::wordArray()[array_rand(Game::wordArray(), 1)]
+            );
             $this->guess_count = 6;
             $this->incorrect_letters = array();
             $this->guesses = array();
@@ -146,6 +148,11 @@
         static function getGame()
         {
             return $_SESSION['game'];
+        }
+
+        static function wordArray()
+        {
+            return ['alloy', 'metal', 'tired', 'horrible', 'spaghetti', 'school', 'study', 'hello', 'java', 'pizza', 'jazz', 'fizz', 'hajj', 'takfir', 'yellow', 'blue', 'dog', 'goodbye'];
         }
     }
 ?>
