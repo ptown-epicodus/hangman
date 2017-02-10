@@ -7,6 +7,7 @@
         private $guesses;
         private $letter_positions;
         private $won;
+        private $recent_guess;
 
         function __construct()
         {
@@ -16,6 +17,7 @@
             $this->guesses = array();
             $this->letter_positions = array_fill(0, count($this->word), '-');
             $this->won = false;
+            $this->recent_guess = NULL;
         }
 
         function getWord()
@@ -67,11 +69,11 @@
         {
             foreach ($this->guesses as $guess) {
                 if ($guess->getLetter() == $letter) {
-                    return true;
+                    return false;
                 }
             }
 
-            return false;
+            return true;
         }
 
         function guessIsAccurate($guess)
@@ -84,10 +86,12 @@
             }
 
             if (empty($result)) {
-                return false;
-            } else {
-                return $result;
+                $guess_is_unique =  $this->addIncorrectLetter($guess->getLetter());
+                if ($guess_is_unique) {
+                    $this->decrementGuessCount();
+                }
             }
+            return $result;
         }
 
         function getLetterPositions()
@@ -102,8 +106,10 @@
 
         function updateLetterPositions($letter, $indices)
         {
-            for ($i = 0; $i < count($indices); $i++) {
-                $this->letter_positions[$indices[$i]] = $letter;
+            if ( ! empty($indices)) {
+                for ($i = 0; $i < count($indices); $i++) {
+                    $this->letter_positions[$indices[$i]] = $letter;
+                }
             }
         }
 
@@ -117,9 +123,24 @@
             $this->won = true;
         }
 
+        function getRecentGuess()
+        {
+            return $this->recent_guess;
+        }
+
+        function setRecentGuess($new_guess)
+        {
+            $this->recent_guess = $new_guess;
+        }
+
         function save()
         {
             $_SESSION['game'] = $this;
+        }
+
+        function delete()
+        {
+            $_SESSION['game'] = NULL;
         }
 
         static function getGame()

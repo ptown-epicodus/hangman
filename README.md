@@ -39,6 +39,7 @@ JSON
 * A player can start a game, causing a word to be generated, showing a row of blanks representing each letter.
 * A player can guess the word and get feedback on whether he is correct.
 * A player can guess a letter and get feedback on whether the letter appears in the word.
+* The game does not accept a duplicate letter guess.
 * A correct letter guess reveals all the occurrences of that letter in place of the appropriate blank(s).
 * An incorrect guess displays a component of the 'hangman' and decrements by one the number of guesses the player can make.
 * An incorrect letter guess adds that letter to the display of letters not present in the word.

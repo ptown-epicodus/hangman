@@ -12,24 +12,52 @@
                 <button type='submit'>Start game!</button>
             </form>
         {% else %}
-            {% if game.getWon %}
+            {% if game.getGuessCount < 1 %}
+                <p>Game over!</p>
+            {% elseif game.getWon %}
                 <p>You won!</p>
-            {% elseif game.getGuessCount < 6 %}
-                <p>You guessed wrong</p>
             {% endif %}
             <h1>{{ game.getLetterPositionsString }}</h1>
             <h2>Remaining mistakes: {{ game.getGuessCount }}</h2>
-            <div class='row'>
-                <div class='col-md-6'>
-                    <form action='/word_guess' method='post'>
-                        <div class='form-group'>
-                            <label for='word-guess'>Word Guess</label>
-                            <input id='word-guess' name='word-guess' type='text'>
-                        </div>
-                        <button type='submit'>Guess Word!</button>
-                    </form>
-                </div>
+            <div class='bad-letters'>
+                <p>
+                    {% for letter in game.getIncorrectLetters %}
+                        {{ letter }}
+                    {% endfor %}
+                </p>
             </div>
+            {% if not game.getWon and game.getGuessCount > 0 %}
+                {% if game.getRecentGuess is empty %}
+                    <p>You need a valid guess.</p>
+                {% elseif correct %}
+                    <p>Good guess!</p>
+                {% else %}
+                    <p>Bad guess!</p>
+                {% endif %}
+                <div class='row'>
+                    <div class='col-md-6'>
+                        <form action='/word_guess' method='post'>
+                            <div class='form-group'>
+                                <label for='word-guess'>Word Guess</label>
+                                <input id='word-guess' name='word-guess' type='text'>
+                            </div>
+                            <button type='submit'>Guess Word!</button>
+                        </form>
+                    </div>
+                    <div class='col-md-6'>
+                        <form action='/new_guess' method='post'>
+                            <div class='form-group'>
+                                <label for='letter-guess'>Letter Guess</label>
+                                <input id='letter-guess' name='letter-guess' type='text'>
+                            </div>
+                            <button type='submit'>Guess Letter!</button>
+                        </form>
+                    </div>
+                </div>
+            {% endif %}
+            <form action='/clear_game' method='post'>
+                <button type='submit' class='btn btn-danger'>Clear</button>
+            </form>
         {% endif %}
     </div>
 </body>

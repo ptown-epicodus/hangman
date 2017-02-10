@@ -23,10 +23,21 @@
 
     $app->get('/hangman', function() use ($app) {
         $game = Game::getGame();
+        $guess_just_made = NULL;
+        if ($game) {
+            $guess_just_made = $game->getRecentGuess();
+        }
 
-        return $app['twig']->render('hangman.html.twig', array(
-            'game' => $game
-        ));
+        if ($guess_just_made) {
+            return $app['twig']->render('hangman.html.twig', array(
+                'game' => $game,
+                'correct' => ! empty($game->guessIsAccurate($guess_just_made))
+            ));
+        } else {
+            return $app['twig']->render('hangman.html.twig', array(
+                'game' => $game
+            ));
+        }
     });
 
     $app->post('/new_game', function() use ($app) {
@@ -45,6 +56,29 @@
         } else {
             $game->decrementGuessCount();
         }
+
+        return $app->redirect('/hangman');
+    });
+
+    $app->post('/new_guess', function() use ($app) {
+        $game = Game::getGame();
+        $guess = new Guess($_POST['letter-guess']);
+        $unique = $game->checkGuesses($guess->getLetter());
+        if ($unique) {
+            $game->addGuess($guess);
+            $game->setRecentGuess($guess);
+            $letters_found = $game->guessIsAccurate($guess);
+            $game->updateLetterPositions($guess->getLetter(), $letters_found);
+        } else {
+            $game->setRecentGuess(NULL);
+        }
+
+        return $app->redirect('/hangman');
+    });
+
+    $app->post('/clear_game', function() use ($app) {
+        $game = Game::getGame();
+        $game->delete();
 
         return $app->redirect('/hangman');
     });
